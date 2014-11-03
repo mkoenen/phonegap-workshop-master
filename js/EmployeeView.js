@@ -12,37 +12,37 @@ var EmployeeView = function(employee) {
     };
 
     this.addLocation = function(event) {
-	    event.preventDefault();
-	    console.log('addLocation');
-	    navigator.geolocation.getCurrentPosition(
-	        function(position) {
-	            $('.location', this.el).html(position.coords.latitude + ',' + position.coords.longitude);
-	        },
-	        function() {
-	            alert('Error getting location');
-	        });
-	    return false;
-	};
+        event.preventDefault();
+        console.log('addLocation');
+        navigator.geolocation.getCurrentPosition(
+            function(position) {
+                $('.location', this.el).html(position.coords.latitude + ',' +position.coords.longitude);
+            },
+            function() {
+                alert('Error getting location');
+            });
+        return false;
+    };
 
-	this.addToContacts = function(event) {
-	    event.preventDefault();
-	    console.log('addToContacts');
-	    if (!navigator.contacts) {
-	        app.showAlert("Contacts API not supported", "Error");
-	        return;
-	    }
-	    var contact = navigator.contacts.create();
-	    contact.name = {givenName: employee.firstName, familyName: employee.lastName};
-	    var phoneNumbers = [];
-	    phoneNumbers[0] = new ContactField('work', employee.officePhone, false);
-	    phoneNumbers[1] = new ContactField('mobile', employee.cellPhone, true); // preferred number
-	    contact.phoneNumbers = phoneNumbers;
-	    contact.save();
-	    return false;
-	};
+    this.addToContacts = function(event) {
+        event.preventDefault();
+        console.log('addToContacts');
+        if (!navigator.contacts) {
+            app.showAlert("Contacts API not supported", "Error");
+            return;
+        }
+        var contact = navigator.contacts.create();
+        contact.name = {givenName: app.currentEmployee.firstName, familyName:  app.currentEmployee.lastName};
+        var phoneNumbers = [];
+        phoneNumbers[0] = new ContactField('work', app.currentEmployee.officePhone, false);
+        phoneNumbers[1] = new ContactField('mobile', app.currentEmployee.cellPhone, true); // preferred number
+        contact.phoneNumbers = phoneNumbers;
+        contact.save();
+        return false;
+    };
 
     this.initialize();
 
- }
+}
 
 EmployeeView.template = Handlebars.compile($("#employee-tpl").html());
